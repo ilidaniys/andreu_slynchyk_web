@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    /*margin: 0;*/
+    /*padding: 0;*/
+    font-family: 'Rubik', sans-serif;
+}
+
+.input-primary {
+    @apply max-w-full w-full h-[3rem] flex justify-start items-center pl-3 border outline-none bg-gray-900 focus:bg-gray-400 focus:text-gray-800 font-bold text-xl transition-all
+}
+
+.input-valid {
+    @apply border-gray-400 text-gray-50
+}
+
+.input-non-valid {
+    @apply accent-red-700 border-red-500 text-red-500 focus:text-black focus:text-black
+}
+
+
+
