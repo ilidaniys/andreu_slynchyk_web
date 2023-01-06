@@ -21,13 +21,13 @@ const Index = () => {
                             Join now
                         </Link>
                     </button>
-                    <button
-                        className={'text-6xl border lg:w-2/5 2lg:w-1/3 p-2 hover:animate-fills bg-right bg-gradient-to-r from-black-500'}
-                    >
-                        <Link href={'/login'}>
-                            Join now
-                        </Link>
-                    </button>
+                    {/*<button*/}
+                    {/*    className={'text-6xl border lg:w-2/5 2lg:w-1/3 p-2 hover:animate-fills'}*/}
+                    {/*>*/}
+                    {/*    <Link href={'/login'}>*/}
+                    {/*        Join now*/}
+                    {/*    </Link>*/}
+                    {/*</button>*/}
                 </div>
             </div>
         </div>

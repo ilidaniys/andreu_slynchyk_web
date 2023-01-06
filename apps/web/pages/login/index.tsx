@@ -1,12 +1,16 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, FormEvent, useEffect, useState } from 'react'
 import LinkLayout from '../../components/layout/LinkLayout'
 import RegisterForm from '../../components/registerComponent/RegisterForm'
 import InputComponent from '../../components/registerComponent/InputComponent'
+import { useRouter } from 'next/router'
 
 const EMAIL_REGEX = '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$'
 
 const Index: FC = () => {
-    const [valueEmail, setValue] = useState('')
+
+    const router = useRouter()
+
+    const [valueEmail, setEmail] = useState('')
     const [valuePassword, setPassword] = useState('')
 
     const [validEmail, setValidEmail] = useState(false)
@@ -27,10 +31,20 @@ const Index: FC = () => {
         } else {
             setValidEmail(false)
         }
-        setValue(e.target.value)
+        setEmail(e.target.value)
     }
     const inputPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTouchedPassword(true)
+        if (e.target.value) {
+            setValidPassword(true)
+        } else {
+            setValidPassword(false)
+        }
         setPassword(e.target.value)
+    }
+    const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (errorEmail || errorPassword) router.replace('/home').catch(e => console.log(e))
     }
 
     useEffect(() => {
@@ -38,6 +52,12 @@ const Index: FC = () => {
         if (!validEmail && touchedEmail) setErrorEmail(true)
 
     }, [valueEmail, touchedEmail])
+
+    useEffect(() => {
+        if (!touchedPassword) setErrorPassword(false)
+        if (!validPassword && touchedPassword) setErrorPassword(true)
+
+    }, [valuePassword, touchedPassword])
 
     return (
         <LinkLayout>
@@ -47,11 +67,20 @@ const Index: FC = () => {
                 submitText={'Submit!'}
                 navigateLink={'/login/register'}
                 navigateText={'Register new account!'}
+                submitHandler={submitHandler}
             >
-                <InputComponent handler={inputEmailHandler} value={valueEmail} type={'email'}
-                                valid={errorEmail}>email</InputComponent>
-                <InputComponent handler={inputPasswordHandler} value={valueEmail} type={'password'}
-                                valid={errorPassword}>Password</InputComponent>
+                <InputComponent
+                    handler={inputEmailHandler}
+                    value={valueEmail}
+                    type={'email'}
+                    valid={errorEmail}>
+                    email</InputComponent>
+                <InputComponent
+                    handler={inputPasswordHandler}
+                    value={valuePassword}
+                    type={'password'}
+                    valid={errorPassword}>
+                    Password</InputComponent>
             </RegisterForm>
         </LinkLayout>
     )
