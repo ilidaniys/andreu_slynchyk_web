@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react'
-import { IMenu } from '../layout/layout'
+import { IMenu } from '../layout/LinkLayout'
 import NavLink from './NavLink'
 
 
