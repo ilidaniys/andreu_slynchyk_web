@@ -13,20 +13,18 @@ export const authOptions: NextAuthOptions = {
     // Configure one or more authentication providers
     providers: [
         CredentialsProvider({
+            type: 'credentials',
             // The name to display on the sign in form (e.g. "Sign in with...")
             name: 'Credentials',
             // `credentials` is used to generate a form on the sign in page.
             // You can specify which fields should be submitted, by adding keys to the `credentials` object.
             // e.g. domain, username, password, 2FA token, etc.
             // You can pass any HTML attribute to the <input> tag through the object.
-            credentials: {
-                userEmail: { label: 'Username', type: 'email', placeholder: 'jsmith' },
-                userPassword: { label: 'Password', type: 'password' },
-            },
+            credentials: {},
 
             authorize(credentials, req) {
                 // Add logic here to look up the user from the credentials supplied
-                const { userEmail, userPassword } = credentials as any
+                const { userEmail, userPassword } = credentials as { userEmail: string, userPassword: string }
                 const user1 = { id: '1', email: 'test@test.com', password: '123' }
                 const users: userDTO[] = [
                     { id: '1', email: 'test@test.com', password: '123' },
@@ -37,8 +35,10 @@ export const authOptions: NextAuthOptions = {
                         return user
                     } else return null
                 })
-                if (currentUser) {
+
+                if (currentUser != null) {
                     // Any object returned will be saved in `user` property of the JWT
+                    console.log('confirm')
                     return currentUser
                 } else {
                     // If you return null then an error will be displayed advising the user to check their details.
@@ -54,6 +54,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/login',
     },
+    secret: 'test',
 }
 
 export default NextAuth(authOptions)

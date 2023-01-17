@@ -1,7 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import panorama from '../public/img/panorma.jpeg'
-import Link from 'next/link'
+import StandardButton from '../components/StandardButton'
+import { signIn } from 'next-auth/react'
 
 
 const Index = () => {
@@ -14,13 +15,14 @@ const Index = () => {
                     className={'flex flex-col lg:ml-[140px] lg:mb-[140px] 2lg:ml-[360px] 2lg:mb-[360px] gap-[20px] z-30 text-gray-50'}>
                     <h1 className={'lg:text-7xl 2lg:text-9xl'}>Welcome to travel blog</h1>
                     <h1 className={'lg:text-5xl 2lg:text-8xl'}>Let's search all world</h1>
-                    <button
-                        className={'text-6xl border lg:w-2/5 2lg:w-1/3 p-2 hover:bg-gray-400 hover:text-gray-800 transition-all delay-250'}
+                    <StandardButton
+                        size={'xl'}
+                        executor={() => {
+                            signIn()
+                        }}
                     >
-                        <Link href={'/login'}>
-                            Join now
-                        </Link>
-                    </button>
+                        Join us!
+                    </StandardButton>
                     {/*<button*/}
                     {/*    className={'text-6xl border lg:w-2/5 2lg:w-1/3 p-2 hover:animate-fills'}*/}
                     {/*>*/}

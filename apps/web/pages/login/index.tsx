@@ -1,24 +1,20 @@
-import React, { FC, FormEvent, useEffect, useState } from 'react'
+import React, { FC, FormEvent, useState } from 'react'
 import LinkLayout from '../../components/layout/LinkLayout'
 import RegisterForm from '../../components/registerComponent/RegisterForm'
 import InputComponent from '../../components/registerComponent/InputComponent'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 
 const EMAIL_REGEX = '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$'
 
 const Index: FC = () => {
-
     const router = useRouter()
 
     const [valueEmail, setEmail] = useState('')
     const [valuePassword, setPassword] = useState('')
 
-    const [validEmail, setValidEmail] = useState(false)
-    const [validPassword, setValidPassword] = useState(false)
-
     const [touchedEmail, setTouchedEmail] = useState(false)
     const [touchedPassword, setTouchedPassword] = useState(false)
-
 
     const [errorEmail, setErrorEmail] = useState(false)
     const [errorPassword, setErrorPassword] = useState(false)
@@ -27,37 +23,38 @@ const Index: FC = () => {
     const inputEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTouchedEmail(true)
         if (e.target.value.toLowerCase().match(EMAIL_REGEX)) {
-            setValidEmail(true)
+            setErrorEmail(false)
         } else {
-            setValidEmail(false)
+            setErrorEmail(true)
         }
         setEmail(e.target.value)
     }
     const inputPasswordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTouchedPassword(true)
         if (e.target.value) {
-            setValidPassword(true)
+            setErrorPassword(false)
         } else {
-            setValidPassword(false)
+            setErrorPassword(true)
         }
         setPassword(e.target.value)
     }
-    const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (errorEmail || errorPassword) router.replace('/home').catch(e => console.log(e))
+        console.log(errorEmail, errorPassword)
+        if (!errorEmail && !errorPassword && touchedEmail && touchedPassword) {
+            console.log('here')
+            const result = await signIn('Credentials', {
+                userEmail: valueEmail,
+                userPass: valuePassword,
+                redirect: false,
+            })
+            console.log(result)
+        }
     }
-
-    useEffect(() => {
-        if (!touchedEmail) setErrorEmail(false)
-        if (!validEmail && touchedEmail) setErrorEmail(true)
-
-    }, [valueEmail, touchedEmail])
-
-    useEffect(() => {
-        if (!touchedPassword) setErrorPassword(false)
-        if (!validPassword && touchedPassword) setErrorPassword(true)
-
-    }, [valuePassword, touchedPassword])
+    const submitHandlerTest = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        router.replace('/home')
+    }
 
     return (
         <LinkLayout>
@@ -67,7 +64,7 @@ const Index: FC = () => {
                 submitText={'Submit!'}
                 navigateLink={'/login/register'}
                 navigateText={'Register new account!'}
-                submitHandler={submitHandler}
+                submitHandler={submitHandlerTest}
             >
                 <InputComponent
                     handler={inputEmailHandler}
