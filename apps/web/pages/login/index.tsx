@@ -1,5 +1,5 @@
 import React, { FC, FormEvent, useState } from 'react'
-import LinkLayout from '../../components/layout/LinkLayout'
+import LinkLayout, { IMenu } from '../../components/layout/LinkLayout'
 import RegisterForm from '../../components/registerComponent/RegisterForm'
 import InputComponent from '../../components/registerComponent/InputComponent'
 import { signIn } from 'next-auth/react'
@@ -53,9 +53,23 @@ const Index: FC = () => {
     }
     const submitHandlerTest = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        router.replace('/home')
+        router.replace('/news')
     }
 
+    const menu: IMenu[] = [
+        {
+            executor: () => {
+                router.replace('/')
+            },
+            tittle: 'Home',
+        },
+        {
+            executor: () => {
+                router.replace('/login')
+            },
+            tittle: 'Login',
+        },
+    ]
     return (
         <LinkLayout>
             <RegisterForm
